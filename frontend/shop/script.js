@@ -86,14 +86,14 @@ let favorites = JSON.parse(localStorage.getItem('maki_favorites')) || [];
 let activeProducts = [...products]; // Copia de respaldo por si el servidor está apagado
 // Configuración de la API del Backend (Reemplaza la URL de producción cuando la despliegues)
 const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3000/api/products'
+    ? 'http://localhost:5000/api/products'
     : 'https://maki-boutique-backend.onrender.com/api/products';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Initialize Lucide Icons
     lucide.createIcons();
     
-    // Intentar cargar productos desde MySQL de Aiven
+    // Intentar cargar productos desde la base de datos de Aiven
     await fetchProductsFromDB();
     
     // Update badges
@@ -112,7 +112,7 @@ async function fetchProductsFromDB() {
             // Evitar usar datos de respaldo mock sin conexión del backend
             if (dbProducts && dbProducts.length > 0 && !dbProducts[0].name.includes('(Sin Conexión)')) {
                 activeProducts = dbProducts;
-                console.log('✓ Productos cargados exitosamente desde MySQL.');
+                console.log('✓ Productos cargados exitosamente desde la base de datos.');
             }
         }
     } catch (error) {
@@ -471,6 +471,37 @@ function renderProducts(productArray) {
 /* ==========================================================================
    QUICK VIEW MODAL RENDERING
    ========================================================================== */
+// Traducir nombres de colores en español a valores hexadecimales para la UI
+function translateColor(colorName) {
+    if (!colorName) return '#ffffff';
+    const clean = colorName.trim().toLowerCase();
+    
+    // Si ya es un código hexadecimal, lo devolvemos tal cual
+    if (clean.startsWith('#')) return clean;
+    
+    const colorMap = {
+        'rosa': '#ffd3e0',
+        'rosa maki': '#ff5599',
+        'blanco': '#ffffff',
+        'negro': '#111111',
+        'crema': '#fffdeb',
+        'beige': '#f5f5dc',
+        'gris': '#808080',
+        'azul': '#add8e6',
+        'verde': '#98fb98',
+        'rojo': '#ff4d4d',
+        'amarillo': '#fff3cd',
+        'morado': '#dbb2ff',
+        'naranja': '#ffe0b2',
+        'café': '#8b5a2b',
+        'cafe': '#8b5a2b',
+        'marrón': '#8b5a2b',
+        'marron': '#8b5a2b'
+    };
+    
+    return colorMap[clean] || clean;
+}
+
 function openQuickView(id) {
     const product = activeProducts.find(p => p.id === id);
     if (!product) return;
@@ -486,7 +517,8 @@ function openQuickView(id) {
     // Generate Color Dots HTML
     let colorsHtml = '';
     product.colors.forEach((color, idx) => {
-        colorsHtml += `<button class="color-btn ${idx === 0 ? 'active' : ''}" style="background-color: ${color}" data-color="${color}" aria-label="Color ${color}"></button>`;
+        const mappedColor = translateColor(color);
+        colorsHtml += `<button class="color-btn ${idx === 0 ? 'active' : ''}" style="background-color: ${mappedColor}" data-color="${color}" aria-label="Color ${color}"></button>`;
     });
 
     modalContent.innerHTML = `
@@ -692,7 +724,7 @@ function renderCartItems() {
             <img src="${item.image}" alt="${item.name}" class="cart-item-img">
             <div class="cart-item-details">
                 <h4 class="cart-item-name">${item.name}</h4>
-                <div class="cart-item-meta">Talla: ${item.size} | Color: <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background-color:${item.color}; border:1px solid #ddd; vertical-align:middle;"></span></div>
+                <div class="cart-item-meta">Talla: ${item.size} | Color: <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background-color:${translateColor(item.color)}; border:1px solid #ddd; vertical-align:middle;"></span></div>
                 <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
                 
                 <!-- Qty controls -->

@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAKI Boutique | Panel de Administración</title>
     
+    <!-- Evitar parpadeo del panel de administración si no está autenticado -->
+    <script>
+        if (!sessionStorage.getItem('maki_admin_token')) {
+            window.location.replace('login.html');
+        }
+    </script>
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -212,6 +219,22 @@
                 position: static;
             }
         }
+        
+        .file-upload-box:hover {
+            background-color: var(--color-pink-soft) !important;
+            border-color: var(--color-primary) !important;
+        }
+        .file-upload-box.has-file {
+            border-style: solid;
+            background-color: #fff1f5 !important;
+            border-color: var(--color-primary);
+        }
+        .image-mode-toggle {
+            transition: var(--transition-fast);
+        }
+        .image-mode-toggle:hover {
+            color: var(--color-secondary) !important;
+        }
     </style>
 </head>
 <body>
@@ -230,13 +253,13 @@
                     <img src="assets/logo.png" alt="Maki Boutique Logo" class="admin-logo">
                     <div>
                         <h1 style="font-family: var(--font-heading); font-size: 1.8rem;">Maki Boutique</h1>
-                        <p style="font-size: 0.85rem; color: var(--color-text-muted);">Carga y Gestión de Prendas en Base de Datos MySQL</p>
+                        <p style="font-size: 0.85rem; color: var(--color-text-muted);">Carga y Gestión de Prendas en la Base de Datos</p>
                     </div>
                 </div>
-                <a href="../shop/index.html" id="back-to-shop-link" class="btn btn-secondary btn-sm">
-                    <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
-                    <span>Volver a la Tienda</span>
-                </a>
+                <button id="btn-logout" class="btn btn-secondary btn-sm" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                    <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+                    <span>Salir de la app</span>
+                </button>
             </div>
 
             <!-- Form & Live Preview Grid -->
@@ -277,15 +300,30 @@
                             </div>
                         </div>
 
-                        <!-- Image URL & Badge -->
+                        <!-- Image Upload/URL Tab & Badge -->
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="prod-image">Enlace de la Imagen (URL) *</label>
-                                <input type="text" id="prod-image" class="form-control" placeholder="Ej. assets/images/vestido_rosa.png" required>
+                                <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span>Imagen de la Prenda *</span>
+                                    <span class="image-mode-toggle" style="font-size: 0.8rem; font-weight: 600; cursor: pointer; color: var(--color-primary); text-decoration: underline;" id="toggle-image-mode">Usar Enlace (URL)</span>
+                                </label>
+                                
+                                <!-- File Upload Input -->
+                                <div id="image-file-container" class="file-upload-box" style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed var(--color-pink-soft); border-radius: var(--border-radius-md); padding: 20px; text-align: center; cursor: pointer; background: var(--color-pink-ultra-soft); transition: var(--transition-fast); min-height: 110px;">
+                                    <input type="file" id="prod-image-file" accept="image/*" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                                    <i data-lucide="upload-cloud" style="width: 28px; height: 28px; color: var(--color-primary); margin-bottom: 6px;"></i>
+                                    <span id="file-upload-text" style="font-size: 0.85rem; color: var(--color-text-dark); font-weight: 500;">Seleccionar foto desde celular o PC</span>
+                                    <span style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 2px;">PNG, JPG, WEBP o GIF (Max. 5MB)</span>
+                                </div>
+                                
+                                <!-- URL Input (Hidden by default, shown on toggle) -->
+                                <div id="image-url-container" class="hide">
+                                    <input type="text" id="prod-image" class="form-control" placeholder="Ej. https://imgur.com/foto.png" style="height: 52px;">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="prod-badge">Etiqueta de Tarjeta (Opcional)</label>
-                                <input type="text" id="prod-badge" class="form-control" placeholder="Ej. Nuevo, 15% OFF, Agotado">
+                                <input type="text" id="prod-badge" class="form-control" placeholder="Ej. Nuevo, 15% OFF, Agotado" style="height: 52px;">
                             </div>
                         </div>
 
@@ -309,9 +347,9 @@
 
                         <!-- Colors Input -->
                         <div class="form-group">
-                            <label for="prod-colors">Códigos Hexadecimales de Colores (Separados por coma)</label>
-                            <input type="text" id="prod-colors" class="form-control" placeholder="Ej. #ffd3e0, #ffffff, #ffd3e0">
-                            <span style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 3px;">Ejemplos: #ff5599 (rosa maki), #ffffff (blanco), #ffd3e0 (rosa suave).</span>
+                            <label for="prod-colors">Colores Disponibles (Separados por coma)</label>
+                            <input type="text" id="prod-colors" class="form-control" placeholder="Ej. Rosa, Blanco, Beige, Negro">
+                            <span style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 3px;">Ejemplos: Rosa, Blanco, Crema, Beige, Negro, Gris (puedes escribir los nombres en español o usar códigos como #ffd3e0).</span>
                         </div>
 
                         <!-- Description -->
@@ -329,7 +367,7 @@
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary" style="margin-top: 25px; height: 52px;" id="btn-submit">
                             <i data-lucide="plus-circle"></i>
-                            <span>Cargar Prenda en MySQL</span>
+                            <span>Cargar Prenda</span>
                         </button>
                     </form>
                     
@@ -367,8 +405,8 @@
 
             <!-- Existing Products List Table -->
             <div class="table-section" id="products-list-section">
-                <h2>Prendas Cargadas en MySQL</h2>
-                <p style="font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 25px;">Aquí puedes visualizar la lista de productos que están actualmente en tu base de datos de Aiven MySQL y eliminarlos si lo deseas.</p>
+                <h2>Prendas Cargadas</h2>
+                <p style="font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 25px;">Aquí puedes visualizar la lista de productos que están actualmente en tu base de datos de Aiven y eliminarlos si lo deseas.</p>
                 
                 <div class="products-table-wrapper">
                     <table class="products-table">
@@ -405,9 +443,12 @@
 
     <!-- Admin Logic JavaScript -->
     <script>
+        // Obtener token de autenticación
+        const token = sessionStorage.getItem('maki_admin_token');
+
         // Configuración de la API del Backend (Reemplaza la URL de producción cuando la despliegues)
         const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:3000/api/products'
+            ? 'http://localhost:5000/api/products'
             : 'https://maki-boutique-backend.onrender.com/api/products';
         const form = document.getElementById('product-form');
         const dbProductsRows = document.getElementById('db-products-rows');
@@ -419,18 +460,22 @@
             lucide.createIcons();
             loadDbProducts();
             setupLivePreview();
-            setupBackToShopLink();
+            setupLogoutButton();
         });
 
-        // Configurar enlace de retorno dinámico según el entorno
-        function setupBackToShopLink() {
-            const link = document.getElementById('back-to-shop-link');
-            if (link) {
-                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                    link.href = '../shop/index.html';
-                } else {
-                    link.href = 'https://maki-boutique.vercel.app'; // Reemplazar con la URL oficial de la tienda
-                }
+        // Configurar el botón de salir de la app (Cerrar Sesión)
+        function setupLogoutButton() {
+            const logoutBtn = document.getElementById('btn-logout');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    if (confirm('¿Estás seguro de que deseas cerrar sesión y salir del panel de administración?')) {
+                        sessionStorage.removeItem('maki_admin_token');
+                        showToastAlert('Cerrando sesión...');
+                        setTimeout(() => {
+                            window.location.replace('login.html');
+                        }, 1000);
+                    }
+                });
             }
         }
 
@@ -444,7 +489,7 @@
                     dbProductsRows.innerHTML = `
                         <tr>
                             <td colspan="7" style="text-align: center; color: var(--color-text-muted); padding: 30px;">
-                                No hay prendas registradas en la base de datos de MySQL. ¡Sube la primera!
+                                No hay prendas registradas en la base de datos. ¡Sube la primera!
                             </td>
                         </tr>
                     `;
@@ -494,6 +539,10 @@
             }
         }
 
+        // Variables globales para la carga de imágenes
+        let selectedImageBase64 = '';
+        let imageMode = 'file'; // 'file' o 'url'
+
         // Live preview synchronization
         function setupLivePreview() {
             const prodName = document.getElementById('prod-name');
@@ -502,6 +551,12 @@
             const prodOldPrice = document.getElementById('prod-old-price');
             const prodImage = document.getElementById('prod-image');
             const prodBadge = document.getElementById('prod-badge');
+            
+            const imageFile = document.getElementById('prod-image-file');
+            const toggleImageModeBtn = document.getElementById('toggle-image-mode');
+            const imageFileContainer = document.getElementById('image-file-container');
+            const imageUrlContainer = document.getElementById('image-url-container');
+            const fileUploadText = document.getElementById('file-upload-text');
 
             const prevName = document.getElementById('prev-name');
             const prevCat = document.getElementById('prev-cat');
@@ -539,7 +594,61 @@
 
             // Image URL listener
             prodImage.addEventListener('input', () => {
-                prevImg.src = prodImage.value || 'assets/images/pink_floral_dress.png';
+                if (imageMode === 'url') {
+                    prevImg.src = prodImage.value || 'assets/images/pink_floral_dress.png';
+                }
+            });
+
+            // Image File listener (Convierte a Base64 y actualiza la vista previa)
+            imageFile.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    // Validar tamaño del archivo (Máximo 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        showToastAlert("❌ El archivo supera el límite de 5MB.");
+                        imageFile.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        selectedImageBase64 = event.target.result;
+                        prevImg.src = selectedImageBase64;
+                        
+                        // Modificar UI de carga
+                        imageFileContainer.classList.add('has-file');
+                        fileUploadText.textContent = `📸 Foto seleccionada: ${file.name.substring(0, 20)}...`;
+                        fileUploadText.style.color = 'var(--color-primary)';
+                        
+                        showToastAlert("✓ Foto cargada exitosamente en vista previa.");
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Conmutador de método de imagen (Subir Archivo vs Pegar Enlace URL)
+            toggleImageModeBtn.addEventListener('click', () => {
+                if (imageMode === 'file') {
+                    // Cambiar a modo URL
+                    imageMode = 'url';
+                    toggleImageModeBtn.textContent = 'Subir desde Celular/PC';
+                    imageFileContainer.classList.add('hide');
+                    imageUrlContainer.classList.remove('hide');
+                    prodImage.required = true;
+                    
+                    // Actualizar vista previa
+                    prevImg.src = prodImage.value || 'assets/images/pink_floral_dress.png';
+                } else {
+                    // Cambiar a modo File
+                    imageMode = 'file';
+                    toggleImageModeBtn.textContent = 'Usar Enlace (URL)';
+                    imageFileContainer.classList.remove('hide');
+                    imageUrlContainer.classList.add('hide');
+                    prodImage.required = false;
+                    
+                    // Actualizar vista previa
+                    prevImg.src = selectedImageBase64 || 'assets/images/pink_floral_dress.png';
+                }
             });
 
             // Badge listener
@@ -562,7 +671,22 @@
             const price = parseFloat(document.getElementById('prod-price').value);
             const oldPriceVal = parseFloat(document.getElementById('prod-old-price').value);
             const oldPrice = isNaN(oldPriceVal) ? null : oldPriceVal;
-            const image = document.getElementById('prod-image').value;
+            
+            // Determinar la imagen a enviar (Base64 o URL)
+            let image = '';
+            if (imageMode === 'file') {
+                if (!selectedImageBase64) {
+                    showToastAlert("❌ Debes seleccionar una foto o usar un enlace URL.");
+                    return;
+                }
+                image = selectedImageBase64;
+            } else {
+                image = document.getElementById('prod-image').value;
+                if (!image) {
+                    showToastAlert("❌ Debes ingresar el enlace de la imagen.");
+                    return;
+                }
+            }
             const description = document.getElementById('prod-desc').value;
             const badge = document.getElementById('prod-badge').value || null;
             const isBestSeller = document.getElementById('prod-bestseller').checked;
@@ -598,13 +722,14 @@
 
             const btnSubmit = document.getElementById('btn-submit');
             btnSubmit.disabled = true;
-            btnSubmit.querySelector('span').textContent = 'Guardando en MySQL...';
+            btnSubmit.querySelector('span').textContent = 'Guardando en la base de datos...';
 
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify(productData)
                 });
@@ -612,8 +737,16 @@
                 const result = await response.json();
                 
                 if (response.ok && result.success) {
-                    showToastAlert(`👗 ¡"${name}" subido con éxito a MySQL!`);
+                    showToastAlert(`👗 ¡"${name}" subida con éxito!`);
                     form.reset();
+                    
+                    // Resetear variables de imagen y UI de subida
+                    selectedImageBase64 = '';
+                    const fileUploadText = document.getElementById('file-upload-text');
+                    const imageFileContainer = document.getElementById('image-file-container');
+                    imageFileContainer.classList.remove('has-file');
+                    fileUploadText.textContent = "Seleccionar foto desde celular o PC";
+                    fileUploadText.style.color = '';
                     
                     // Reset live preview cards
                     document.getElementById('prev-badge').style.display = 'none';
@@ -633,14 +766,32 @@
                 showToastAlert("❌ Error al conectar con el servidor backend.");
             } finally {
                 btnSubmit.disabled = false;
-                btnSubmit.querySelector('span').textContent = 'Cargar Prenda en MySQL';
+                btnSubmit.querySelector('span').textContent = 'Cargar Prenda';
             }
         });
 
-        // Mock delete functionality (for demo since SQL delete route can be added, or mock deletion)
-        function deleteProduct(id, name) {
-            if (confirm(`¿Estás seguro de que deseas eliminar la prenda "${name}" de la base de datos de MySQL?`)) {
-                showToastAlert("La eliminación de prendas está protegida. Para activar la eliminación total, puedes contactar al administrador del sistema.");
+        // Función real para eliminar prendas de la base de datos
+        async function deleteProduct(id, name) {
+            if (confirm(`¿Estás seguro de que deseas eliminar la prenda "${name}" de la base de datos?`)) {
+                try {
+                    const response = await fetch(`${API_URL}/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    });
+                    const result = await response.json();
+                    
+                    if (response.ok && result.success) {
+                        showToastAlert(`🗑️ ¡"${name}" eliminada con éxito!`);
+                        loadDbProducts(); // Recargar la tabla
+                    } else {
+                        showToastAlert(`❌ Error: ${result.error || 'No se pudo eliminar la prenda.'}`);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    showToastAlert("❌ Error al conectar con el servidor backend.");
+                }
             }
         }
 

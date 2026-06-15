@@ -1,13 +1,13 @@
-# 🚀 Guía de Despliegue - MAKI Boutique (Servicios Separados)
+# 🚀 Guía de Despliegue - MAKI Boutique (Infraestructura 100% Vercel)
 
-Este proyecto está dividido en **tres componentes independientes** para un despliegue seguro y escalable:
+Este proyecto está dividido en **tres componentes independientes** para un despliegue seguro, escalable y 100% gratuito en **Vercel**:
 1.  **Tienda Pública (Clientes):** Ubicada en `frontend/shop/`.
 2.  **Panel de Administración (Privado):** Ubicado en `frontend/admin/`.
-3.  **Servidor API (Backend):** Ubicado en `backend/` (conectado a Aiven MySQL).
+3.  **Servidor API (Backend/Serverless):** Ubicado en `backend/` (conectado a Aiven MySQL).
 
 ---
 
-## 📂 Nueva Estructura del Proyecto
+## 📂 Estructura del Proyecto
 
 ```text
 MAKI/
@@ -23,8 +23,9 @@ MAKI/
 │       ├── style.css     # Copia de estilos
 │       └── assets/       # Copia de logo
 │
-└── backend/              # ⚙️ Proyecto en Render (API Node.js)
-    ├── server.js         # API Express
+└── backend/              # ⚙️ Proyecto 3 en Vercel (API Serverless)
+    ├── server.js         # Código del servidor (Express adaptable a Serverless)
+    ├── vercel.json       # Configuración para que Vercel ejecute Express
     ├── package.json
     └── .env              # Configuración local de Aiven MySQL
 ```
@@ -68,21 +69,29 @@ Este servicio estará en un enlace completamente separado para que los comprador
 
 ---
 
-## 3. ⚙️ Despliegue del Backend en Render (backend)
+## 3. ⚙️ Despliegue del Backend en Vercel (backend)
 
-1.  Inicia sesión en [render.com](https://render.com) e importa tu repositorio.
-2.  Crea un nuevo **Web Service**.
-3.  En la configuración de Render:
-    *   **Root Directory:** `backend`
-    *   **Runtime:** `Node`
-    *   **Build Command:** `npm install`
-    *   **Start Command:** `node server.js`
-4.  Ve a la pestaña **Environment** y agrega tus variables de entorno para Aiven MySQL:
+Vercel ejecutará tu servidor API Express como una **Serverless Function** automáticamente gracias al archivo `vercel.json` configurado en el proyecto.
+
+1.  En Vercel, crea un **tercer proyecto** independiente (**Add New** -> **Project**).
+2.  Importa el **mismo repositorio** de GitHub.
+3.  En la configuración:
+    *   **Project Name:** `maki-api` (este nombre definirá la URL de tu API).
+    *   **Root Directory (Directorio Raíz):** Haz clic en *Edit* y selecciona **`backend`**.
+    *   **Framework Preset:** `Other`.
+    *   **Build & Development Settings:** Déjalos vacíos.
+4.  **Configurar Variables de Entorno (Environment Variables):**
+    Antes de desplegar, ve a la pestaña **Settings -> Environment Variables** de este tercer proyecto en Vercel y agrega tus credenciales de Aiven MySQL:
     *   `DB_HOST` = *(Tu host de Aiven)*
     *   `DB_PORT` = `10000` *(Puerto)*
     *   `DB_USER` = `avnadmin`
     *   `DB_PASSWORD` = *(Tu contraseña de Aiven)*
     *   `DB_NAME` = `defaultdb`
+5.  Haz clic en **Deploy**.
+    *   *URL Resultante ejemplo:* `https://maki-api.vercel.app`
+
+> [!IMPORTANT]
+> Una vez desplegado tu backend, copia la URL que te dio Vercel (ej: `https://maki-api.vercel.app`) y reemplázala en la línea 87 de [frontend/shop/script.js](file:///c:/Users/josue/OneDrive/Escritorio/JOSUE-PROYECTOS/MAKI/frontend/shop/script.js) y la línea 408 de [frontend/admin/index.html](file:///c:/Users/josue/OneDrive/Escritorio/JOSUE-PROYECTOS/MAKI/frontend/admin/index.html) para que se comuniquen con la API en la nube.
 
 ---
 
@@ -90,22 +99,22 @@ Este servicio estará en un enlace completamente separado para que los comprador
 
 Puedes correr y probar ambos proyectos locales simulando el comportamiento de Vercel:
 
-1.  **Arrancar Backend (Puerto 3000):**
+1.  **Arrancar Backend (Puerto 5000):**
     ```bash
     cd backend
     node server.js
     ```
-2.  **Arrancar Tienda (Puerto 8000):**
+2.  **Arrancar Tienda (Puerto 8001):**
     ```bash
     cd frontend/shop
-    python -m http.server 8000
+    python -m http.server 8001
     ```
-3.  **Arrancar Admin (Puerto 8080):**
+3.  **Arrancar Admin (Puerto 8002):**
     ```bash
     cd frontend/admin
-    python -m http.server 8080
+    python -m http.server 8002
     ```
 
-*   Abre la tienda en `http://localhost:8000`.
-*   Abre el administrador en `http://localhost:8080`.
-*   Carga un producto desde `http://localhost:8080` y comprueba que se actualiza instantáneamente en el catálogo de `http://localhost:8000`.
+*   Abre la tienda en `http://localhost:8001`.
+*   Abre el administrador en `http://localhost:8002`.
+*   Carga un producto desde `http://localhost:8002` y comprueba que se actualiza instantáneamente en el catálogo de `http://localhost:8001`.
