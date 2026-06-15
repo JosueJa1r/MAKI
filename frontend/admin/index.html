@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAKI Boutique | Panel de Administración</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Link to the main style.css for shared design tokens -->
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        body {
+            background-color: var(--color-pink-ultra-soft);
+        }
+        
+        .admin-wrapper {
+            padding: 50px 0;
+            min-height: 100vh;
+        }
+        
+        .admin-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            background-color: var(--color-white);
+            padding: 20px 30px;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .admin-title-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .admin-logo {
+            height: 50px;
+            width: auto;
+            border-radius: 50%;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            align-items: start;
+        }
+        
+        .admin-card {
+            background-color: var(--color-white);
+            padding: 40px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 211, 224, 0.3);
+        }
+        
+        .admin-card h2 {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            color: var(--color-text-dark);
+            border-bottom: 2px solid var(--color-pink-soft);
+            padding-bottom: 10px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .checkbox-group input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-primary);
+            cursor: pointer;
+        }
+        
+        .sizes-container, .colors-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+        
+        .size-checkbox {
+            display: none;
+        }
+        
+        .size-label {
+            padding: 8px 16px;
+            border: 1px solid var(--color-pink-soft);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition-fast);
+        }
+        
+        .size-checkbox:checked + .size-label {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-color: var(--color-primary);
+        }
+        
+        /* Product Preview Style */
+        .preview-sticky {
+            position: sticky;
+            top: 110px;
+        }
+        
+        .preview-card-container {
+            max-width: 320px;
+            margin: 0 auto;
+        }
+        
+        /* Admin Products List Table */
+        .table-section {
+            margin-top: 50px;
+            background-color: var(--color-white);
+            padding: 40px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 211, 224, 0.3);
+        }
+        
+        .table-section h2 {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--color-pink-soft);
+            padding-bottom: 10px;
+        }
+        
+        .products-table-wrapper {
+            overflow-x: auto;
+        }
+        
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        
+        .products-table th, .products-table td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 211, 224, 0.2);
+        }
+        
+        .products-table th {
+            background-color: var(--color-pink-ultra-soft);
+            color: var(--color-text-dark);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        
+        .products-table td {
+            font-size: 0.95rem;
+        }
+        
+        .table-img {
+            width: 50px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: var(--border-radius-sm);
+            background-color: var(--color-bg-heart);
+        }
+        
+        .btn-delete {
+            background-color: rgba(255, 85, 153, 0.08);
+            color: var(--color-primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+        }
+        
+        .btn-delete:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 992px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            .preview-sticky {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header bar -->
+    <div class="promo-bar">
+        <p>🔐 PANEL DE CONTROL DE CATÁLOGO | MAKI BOUTIQUE</p>
+    </div>
+
+    <div class="admin-wrapper">
+        <div class="container">
+            
+            <!-- Page Header -->
+            <div class="admin-header">
+                <div class="admin-title-box">
+                    <img src="assets/logo.png" alt="Maki Boutique Logo" class="admin-logo">
+                    <div>
+                        <h1 style="font-family: var(--font-heading); font-size: 1.8rem;">Maki Boutique</h1>
+                        <p style="font-size: 0.85rem; color: var(--color-text-muted);">Carga y Gestión de Prendas en Base de Datos MySQL</p>
+                    </div>
+                </div>
+                <a href="../shop/index.html" id="back-to-shop-link" class="btn btn-secondary btn-sm">
+                    <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+                    <span>Volver a la Tienda</span>
+                </a>
+            </div>
+
+            <!-- Form & Live Preview Grid -->
+            <div class="admin-grid">
+                
+                <!-- Product Form Card -->
+                <div class="admin-card">
+                    <h2>Subir Nueva Prenda</h2>
+                    
+                    <form id="product-form" class="contact-form">
+                        
+                        <!-- Name & Category -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prod-name">Nombre de la Prenda *</label>
+                                <input type="text" id="prod-name" class="form-control" placeholder="Ej. Vestido Lino Coral" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prod-category">Categoría *</label>
+                                <select id="prod-category" class="form-control" required style="height: 52px; background: white; appearance: none; -webkit-appearance: none; padding-right: 40px; cursor: pointer;">
+                                    <option value="Vestidos">Vestidos</option>
+                                    <option value="Tops">Tops & Blusas</option>
+                                    <option value="Faldas">Faldas</option>
+                                    <option value="Accesorios">Accesorios</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Price & Old Price -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prod-price">Precio Público ($ USD) *</label>
+                                <input type="number" id="prod-price" class="form-control" placeholder="Ej. 65.00" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prod-old-price">Precio Anterior (Opcional - Tachado)</label>
+                                <input type="number" id="prod-old-price" class="form-control" placeholder="Ej. 80.00" step="0.01">
+                            </div>
+                        </div>
+
+                        <!-- Image URL & Badge -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prod-image">Enlace de la Imagen (URL) *</label>
+                                <input type="text" id="prod-image" class="form-control" placeholder="Ej. assets/images/vestido_rosa.png" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prod-badge">Etiqueta de Tarjeta (Opcional)</label>
+                                <input type="text" id="prod-badge" class="form-control" placeholder="Ej. Nuevo, 15% OFF, Agotado">
+                            </div>
+                        </div>
+
+                        <!-- Sizes Option Checkboxes -->
+                        <div class="form-group">
+                            <label>Tallas Disponibles *</label>
+                            <div class="sizes-container">
+                                <input type="checkbox" id="size-s" class="size-checkbox" value="S" checked>
+                                <label for="size-s" class="size-label">S</label>
+                                
+                                <input type="checkbox" id="size-m" class="size-checkbox" value="M" checked>
+                                <label for="size-m" class="size-label">M</label>
+                                
+                                <input type="checkbox" id="size-l" class="size-checkbox" value="L">
+                                <label for="size-l" class="size-label">L</label>
+
+                                <input type="checkbox" id="size-u" class="size-checkbox" value="Única">
+                                <label for="size-u" class="size-label">Única</label>
+                            </div>
+                        </div>
+
+                        <!-- Colors Input -->
+                        <div class="form-group">
+                            <label for="prod-colors">Códigos Hexadecimales de Colores (Separados por coma)</label>
+                            <input type="text" id="prod-colors" class="form-control" placeholder="Ej. #ffd3e0, #ffffff, #ffd3e0">
+                            <span style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 3px;">Ejemplos: #ff5599 (rosa maki), #ffffff (blanco), #ffd3e0 (rosa suave).</span>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label for="prod-desc">Descripción de la prenda</label>
+                            <textarea id="prod-desc" class="form-control" rows="4" placeholder="Escribe los detalles de la tela, diseño, caída, etc."></textarea>
+                        </div>
+
+                        <!-- Best Seller Checkbox -->
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="prod-bestseller">
+                            <label for="prod-bestseller" style="font-weight: 600; cursor: pointer;">Destacar en portada (Best Seller)</label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary" style="margin-top: 25px; height: 52px;" id="btn-submit">
+                            <i data-lucide="plus-circle"></i>
+                            <span>Cargar Prenda en MySQL</span>
+                        </button>
+                    </form>
+                    
+                    <div id="status-message" class="alert-message success-message hide"></div>
+                </div>
+
+                <!-- Live Preview Card Column -->
+                <div class="preview-sticky">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.5rem; text-align: center; margin-bottom: 20px; color: var(--color-text-dark);">Vista Previa de Tarjeta</h3>
+                    
+                    <div class="preview-card-container">
+                        <!-- Simulated Product Card -->
+                        <div class="product-card">
+                            <div class="product-img-box">
+                                <span class="product-badge" id="prev-badge" style="display: none;">Nuevo</span>
+                                <img src="assets/images/pink_floral_dress.png" id="prev-img" alt="Vista Previa de Prenda">
+                                <div class="product-hover-actions">
+                                    <button class="hover-btn" type="button" title="Vista Rápida"><i data-lucide="eye"></i></button>
+                                    <button class="hover-btn btn-add-cart-quick" type="button"><i data-lucide="shopping-cart"></i> <span>Añadir</span></button>
+                                    <button class="hover-btn" type="button"><i data-lucide="heart"></i></button>
+                                </div>
+                            </div>
+                            <div class="product-details">
+                                <div class="product-cat" id="prev-cat">VESTIDOS</div>
+                                <h3 class="product-name"><a href="#" id="prev-name" onclick="return false;">Prenda de Prueba</a></h3>
+                                <div class="product-price-box">
+                                    <span class="product-price" id="prev-price">$0.00</span>
+                                    <span class="product-price-old" id="prev-old-price" style="display: none;">$0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Existing Products List Table -->
+            <div class="table-section" id="products-list-section">
+                <h2>Prendas Cargadas en MySQL</h2>
+                <p style="font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 25px;">Aquí puedes visualizar la lista de productos que están actualmente en tu base de datos de Aiven MySQL y eliminarlos si lo deseas.</p>
+                
+                <div class="products-table-wrapper">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Prenda</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Tallas</th>
+                                <th>Destacado</th>
+                                <th style="text-align: center;">Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="db-products-rows">
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: var(--color-text-muted);">Cargando catálogo desde la base de datos...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Toast Popup Notification -->
+    <div class="toast-notification" id="toast-notification">
+        <div class="toast-content">
+            <i data-lucide="info" class="toast-icon"></i>
+            <span class="toast-message" id="toast-message">Operación realizada</span>
+        </div>
+    </div>
+
+    <!-- Admin Logic JavaScript -->
+    <script>
+        // Configuración de la API del Backend (Reemplaza la URL de producción cuando la despliegues)
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000/api/products'
+            : 'https://maki-boutique-backend.onrender.com/api/products';
+        const form = document.getElementById('product-form');
+        const dbProductsRows = document.getElementById('db-products-rows');
+        const toast = document.getElementById('toast-notification');
+        const toastMessage = document.getElementById('toast-message');
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            loadDbProducts();
+            setupLivePreview();
+            setupBackToShopLink();
+        });
+
+        // Configurar enlace de retorno dinámico según el entorno
+        function setupBackToShopLink() {
+            const link = document.getElementById('back-to-shop-link');
+            if (link) {
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    link.href = '../shop/index.html';
+                } else {
+                    link.href = 'https://maki-boutique.vercel.app'; // Reemplazar con la URL oficial de la tienda
+                }
+            }
+        }
+
+        // Load existing products from DB
+        async function loadDbProducts() {
+            try {
+                const response = await fetch(API_URL);
+                const products = await response.json();
+                
+                if (products.length === 0) {
+                    dbProductsRows.innerHTML = `
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: var(--color-text-muted); padding: 30px;">
+                                No hay prendas registradas en la base de datos de MySQL. ¡Sube la primera!
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                dbProductsRows.innerHTML = '';
+                products.forEach(prod => {
+                    // Check if it's the offline mockup
+                    const isMock = prod.name.includes('(Sin Conexión)');
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td><img src="${prod.image}" alt="${prod.name}" class="table-img" onerror="this.src='assets/images/pink_floral_dress.png'"></td>
+                        <td>
+                            <strong style="color: var(--color-text-dark);">${prod.name}</strong>
+                            ${prod.badge ? `<span class="product-badge" style="position:static; margin-left:8px; display:inline-block; font-size:0.65rem;">${prod.badge}</span>` : ''}
+                        </td>
+                        <td>${prod.category}</td>
+                        <td>
+                            <span style="color: var(--color-primary); font-weight:700;">$${prod.price.toFixed(2)}</span>
+                            ${prod.oldPrice ? `<span style="text-decoration:line-through; font-size:0.8rem; color:var(--color-text-muted); margin-left:5px;">$${prod.oldPrice.toFixed(2)}</span>` : ''}
+                        </td>
+                        <td><span style="font-size:0.85rem; background:#fff1f5; padding:4px 10px; border-radius:50px; color:var(--color-secondary); font-weight:600;">${prod.sizes.join(', ')}</span></td>
+                        <td>${prod.isBestSeller ? '⭐ Sí' : 'No'}</td>
+                        <td style="text-align: center;">
+                            ${isMock ? '-' : `
+                            <button class="btn-delete" onclick="deleteProduct(${prod.id}, '${prod.name}')" title="Eliminar Prenda">
+                                <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                            </button>
+                            `}
+                        </td>
+                    `;
+                    dbProductsRows.appendChild(row);
+                });
+                
+                lucide.createIcons();
+            } catch (err) {
+                console.error(err);
+                dbProductsRows.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: var(--color-primary); padding: 30px; font-weight: 500;">
+                            ⚠️ Error al conectar con el servidor backend en ${API_URL}. Asegúrate de iniciar el servidor con "node server.js".
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Live preview synchronization
+        function setupLivePreview() {
+            const prodName = document.getElementById('prod-name');
+            const prodCategory = document.getElementById('prod-category');
+            const prodPrice = document.getElementById('prod-price');
+            const prodOldPrice = document.getElementById('prod-old-price');
+            const prodImage = document.getElementById('prod-image');
+            const prodBadge = document.getElementById('prod-badge');
+
+            const prevName = document.getElementById('prev-name');
+            const prevCat = document.getElementById('prev-cat');
+            const prevPrice = document.getElementById('prev-price');
+            const prevOldPrice = document.getElementById('prev-old-price');
+            const prevImg = document.getElementById('prev-img');
+            const prevBadge = document.getElementById('prev-badge');
+
+            // Name listener
+            prodName.addEventListener('input', () => {
+                prevName.textContent = prodName.value || 'Prenda de Prueba';
+            });
+
+            // Category listener
+            prodCategory.addEventListener('change', () => {
+                prevCat.textContent = prodCategory.value.toUpperCase();
+            });
+
+            // Price listener
+            prodPrice.addEventListener('input', () => {
+                const val = parseFloat(prodPrice.value);
+                prevPrice.textContent = isNaN(val) ? '$0.00' : `$${val.toFixed(2)}`;
+            });
+
+            // Old Price listener
+            prodOldPrice.addEventListener('input', () => {
+                const val = parseFloat(prodOldPrice.value);
+                if (isNaN(val) || val <= 0) {
+                    prevOldPrice.style.display = 'none';
+                } else {
+                    prevOldPrice.textContent = `$${val.toFixed(2)}`;
+                    prevOldPrice.style.display = 'inline';
+                }
+            });
+
+            // Image URL listener
+            prodImage.addEventListener('input', () => {
+                prevImg.src = prodImage.value || 'assets/images/pink_floral_dress.png';
+            });
+
+            // Badge listener
+            prodBadge.addEventListener('input', () => {
+                if (prodBadge.value) {
+                    prevBadge.textContent = prodBadge.value;
+                    prevBadge.style.display = 'inline';
+                } else {
+                    prevBadge.style.display = 'none';
+                }
+            });
+        }
+
+        // Form Submit
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('prod-name').value;
+            const category = document.getElementById('prod-category').value;
+            const price = parseFloat(document.getElementById('prod-price').value);
+            const oldPriceVal = parseFloat(document.getElementById('prod-old-price').value);
+            const oldPrice = isNaN(oldPriceVal) ? null : oldPriceVal;
+            const image = document.getElementById('prod-image').value;
+            const description = document.getElementById('prod-desc').value;
+            const badge = document.getElementById('prod-badge').value || null;
+            const isBestSeller = document.getElementById('prod-bestseller').checked;
+
+            // Get selected sizes
+            const sizes = [];
+            if (document.getElementById('size-s').checked) sizes.push('S');
+            if (document.getElementById('size-m').checked) sizes.push('M');
+            if (document.getElementById('size-l').checked) sizes.push('L');
+            if (document.getElementById('size-u').checked) sizes.push('Única');
+
+            if (sizes.length === 0) {
+                showToastAlert("Debes seleccionar al menos una talla.");
+                return;
+            }
+
+            // Colors
+            const colorsInput = document.getElementById('prod-colors').value;
+            const colors = colorsInput ? colorsInput.split(',').map(c => c.trim()) : [];
+
+            const productData = {
+                name,
+                category,
+                price,
+                oldPrice,
+                image,
+                description,
+                sizes,
+                colors,
+                badge,
+                isBestSeller
+            };
+
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.disabled = true;
+            btnSubmit.querySelector('span').textContent = 'Guardando en MySQL...';
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(productData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    showToastAlert(`👗 ¡"${name}" subido con éxito a MySQL!`);
+                    form.reset();
+                    
+                    // Reset live preview cards
+                    document.getElementById('prev-badge').style.display = 'none';
+                    document.getElementById('prev-img').src = 'assets/images/pink_floral_dress.png';
+                    document.getElementById('prev-cat').textContent = 'VESTIDOS';
+                    document.getElementById('prev-name').textContent = 'Prenda de Prueba';
+                    document.getElementById('prev-price').textContent = '$0.00';
+                    document.getElementById('prev-old-price').style.display = 'none';
+                    
+                    // Reload table
+                    loadDbProducts();
+                } else {
+                    showToastAlert(`❌ Error: ${result.error || 'No se pudo guardar.'}`);
+                }
+            } catch (err) {
+                console.error(err);
+                showToastAlert("❌ Error al conectar con el servidor backend.");
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.querySelector('span').textContent = 'Cargar Prenda en MySQL';
+            }
+        });
+
+        // Mock delete functionality (for demo since SQL delete route can be added, or mock deletion)
+        function deleteProduct(id, name) {
+            if (confirm(`¿Estás seguro de que deseas eliminar la prenda "${name}" de la base de datos de MySQL?`)) {
+                showToastAlert("La eliminación de prendas está protegida. Para activar la eliminación total, puedes contactar al administrador del sistema.");
+            }
+        }
+
+        // Show Toast Notifications
+        function showToastAlert(message) {
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
