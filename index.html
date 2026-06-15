@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAKI Boutique | Moda Femenina Exclusiva y Elegante</title>
+    <meta name="description" content="Descubre la última colección de MAKI Boutique. Ropa femenina con diseños exclusivos, vestidos elegantes, tops chic y accesorios con envíos a todo el país.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Promo Bar -->
+    <div class="promo-bar" id="promo-bar">
+        <p>✨ ¡Envío gratis en compras mayores a $99! | 10% OFF en tu primera compra con el código: MAKI10 ✨</p>
+    </div>
+
+    <!-- Header Section -->
+    <header class="site-header" id="site-header">
+        <div class="header-container">
+            <!-- Logo Area -->
+            <a href="#" class="logo-link" id="logo-link" aria-label="Inicio MAKI Boutique">
+                <img src="assets/logo.png" alt="MAKI Boutique Logo" class="header-logo" id="header-logo">
+                <div class="logo-text">
+                    <span class="brand-name">MAKI</span>
+                    <span class="brand-sub">BOUTIQUE</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="main-navigation" id="main-navigation" aria-label="Navegación Principal">
+                <ul class="nav-list">
+                    <li><a href="#" class="nav-link active">Inicio</a></li>
+                    <li><a href="#categories" class="nav-link">Colecciones</a></li>
+                    <li><a href="#products" class="nav-link">Productos</a></li>
+                    <li><a href="#about" class="nav-link">Nosotros</a></li>
+                    <li><a href="#contact" class="nav-link">Contacto</a></li>
+                </ul>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="header-actions">
+                <button class="action-btn" id="search-btn" aria-label="Buscar productos">
+                    <i data-lucide="search"></i>
+                </button>
+                <button class="action-btn" id="favorites-btn" aria-label="Mis favoritos">
+                    <i data-lucide="heart"></i>
+                    <span class="badge" id="fav-count">0</span>
+                </button>
+                <button class="action-btn cart-trigger" id="cart-btn" aria-label="Ver carrito de compras">
+                    <i data-lucide="shopping-bag"></i>
+                    <span class="badge" id="cart-count">0</span>
+                </button>
+                <!-- Mobile Menu Toggle -->
+                <button class="action-btn mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Abrir menú">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav" id="mobile-nav">
+        <div class="mobile-nav-header">
+            <div class="mobile-logo">
+                <img src="assets/logo.png" alt="MAKI Boutique Logo" class="header-logo">
+                <div class="logo-text">
+                    <span class="brand-name">MAKI</span>
+                    <span class="brand-sub">BOUTIQUE</span>
+                </div>
+            </div>
+            <button class="close-mobile-menu" id="close-mobile-menu" aria-label="Cerrar menú">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <ul class="mobile-nav-list">
+            <li><a href="#" class="mobile-nav-link">Inicio</a></li>
+            <li><a href="#categories" class="mobile-nav-link">Colecciones</a></li>
+            <li><a href="#products" class="mobile-nav-link">Productos</a></li>
+            <li><a href="#about" class="mobile-nav-link">Nosotros</a></li>
+            <li><a href="#contact" class="mobile-nav-link">Contacto</a></li>
+        </ul>
+
+    </div>
+    <div class="overlay" id="mobile-nav-overlay"></div>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <span class="hero-subtitle">Nueva Colección Primavera / Verano</span>
+                    <h1 class="hero-title">Moda que expresa tu esencia y elegancia</h1>
+                    <p class="hero-description">Encuentra prendas exclusivas diseñadas para realzar tu belleza y brindarte comodidad en cada ocasión. Alta calidad con la delicadeza que te define.</p>
+                    <div class="hero-actions-container">
+                        <a href="#products" class="btn btn-primary">Ver Catálogo</a>
+                        <a href="#about" class="btn btn-secondary">Nuestra Historia</a>
+                    </div>
+                </div>
+                <div class="hero-image-wrapper">
+                    <div class="hero-image-bg-glow"></div>
+                    <img src="assets/images/pink_floral_dress.png" alt="Modelo vistiendo vestido rosa elegante" class="hero-img">
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="categories" id="categories">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle">Estilos creados para ti</span>
+                    <h2 class="section-title">Nuestras Colecciones</h2>
+                </div>
+                <div class="categories-grid">
+                    <!-- Category 1 -->
+                    <div class="category-card" data-category="Vestidos">
+                        <div class="category-img-container">
+                            <img src="assets/images/pink_floral_dress.png" alt="Colección de Vestidos">
+                        </div>
+                        <div class="category-info">
+                            <h3>Vestidos</h3>
+                            <p>Elegancia y frescura</p>
+                            <span class="category-link">Ver colección <i data-lucide="arrow-right"></i></span>
+                        </div>
+                    </div>
+                    <!-- Category 2 -->
+                    <div class="category-card" data-category="Tops">
+                        <div class="category-img-container">
+                            <img src="assets/images/chic_white_blouse.png" alt="Colección de Tops">
+                        </div>
+                        <div class="category-info">
+                            <h3>Tops & Blusas</h3>
+                            <p>Estilo para tu día a día</p>
+                            <span class="category-link">Ver colección <i data-lucide="arrow-right"></i></span>
+                        </div>
+                    </div>
+                    <!-- Category 3 -->
+                    <div class="category-card" data-category="Faldas">
+                        <div class="category-img-container">
+                            <img src="assets/images/elegant_pink_skirt.png" alt="Colección de Faldas">
+                        </div>
+                        <div class="category-info">
+                            <h3>Faldas & Pantalones</h3>
+                            <p>El complemento perfecto</p>
+                            <span class="category-link">Ver colección <i data-lucide="arrow-right"></i></span>
+                        </div>
+                    </div>
+                    <!-- Category 4 -->
+                    <div class="category-card" data-category="Accesorios">
+                        <div class="category-img-container">
+                            <img src="assets/images/pink_leather_handbag.png" alt="Colección de Accesorios">
+                        </div>
+                        <div class="category-info">
+                            <h3>Accesorios</h3>
+                            <p>Detalles que enamoran</p>
+                            <span class="category-link">Ver colección <i data-lucide="arrow-right"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section class="products" id="products">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle">Exclusivos y en Tendencia</span>
+                    <h2 class="section-title">Productos Destacados</h2>
+                </div>
+
+                <!-- Product Filters -->
+                <div class="product-filters">
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="Vestidos">Vestidos</button>
+                    <button class="filter-btn" data-filter="Tops">Tops & Blusas</button>
+                    <button class="filter-btn" data-filter="Faldas">Faldas</button>
+                    <button class="filter-btn" data-filter="Accesorios">Accesorios</button>
+                </div>
+
+                <!-- Product Grid (Dynamic) -->
+                <div class="product-grid" id="product-grid">
+                    <!-- JS will render products here -->
+                    <div class="grid-skeleton">Cargando productos exclusivos...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section class="about" id="about">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-image-side">
+                        <div class="about-logo-card">
+                            <img src="assets/logo.png" alt="MAKI Boutique Logo de Corazón" class="about-heart-logo">
+                        </div>
+                        <div class="decor-circle"></div>
+                    </div>
+                    <div class="about-text-side">
+                        <span class="section-subtitle">Sobre Maki Boutique</span>
+                        <h2 class="section-title">Pasión por la Moda Femenina</h2>
+                        <p class="about-description">
+                            En MAKI Boutique seleccionamos cuidadosamente cada prenda para que encuentres tu estilo ideal. Nos enfocamos en ofrecerte ropa moderna, versátil y cómoda, perfecta para resaltar tu brillo propio tanto en el día a día como en ocasiones especiales.
+                        </p>
+                        <p class="about-description">
+                            Nuestra misión es que te sientas segura, cómoda y elegante. El corazón de nuestro logo representa el amor y la dedicación con la que elegimos y enviamos cada detalle de tu pedido directamente a tu puerta.
+                        </p>
+                        <div class="about-features">
+                            <div class="feature-item">
+                                <div class="feature-icon"><i data-lucide="award"></i></div>
+                                <div>
+                                    <h4>Alta Calidad</h4>
+                                    <p>Telas finamente seleccionadas y acabados de primera.</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i data-lucide="truck"></i></div>
+                                <div>
+                                    <h4>Envíos Seguros</h4>
+                                    <p>Entregas rápidas con empaque ecológico y muy especial.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Newsletter & Contact Section -->
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="contact-grid">
+                    <!-- Newsletter Signup -->
+                    <div class="newsletter-card">
+                        <div class="card-inner">
+                            <h3 class="newsletter-title">Únete al Club MAKI</h3>
+                            <p class="newsletter-desc">Recibe promociones exclusivas, acceso temprano a nuevas colecciones y obtén un <strong>10% de descuento</strong> en tu primera compra.</p>
+                            <form class="newsletter-form" id="newsletter-form">
+                                <div class="form-group-inline">
+                                    <input type="email" placeholder="Tu correo electrónico" class="form-control" required id="newsletter-email">
+                                    <button type="submit" class="btn btn-primary">Suscribirme</button>
+                                </div>
+                            </form>
+                            <div id="newsletter-message" class="alert-message success-message hide"></div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="contact-form-card">
+                        <h3>Escríbenos</h3>
+                        <p>¿Tienes dudas sobre tallas, envíos o un pedido? Estamos para ayudarte.</p>
+                        <form class="contact-form" id="contact-form">
+                            <div class="form-group">
+                                <label for="contact-name">Nombre Completo</label>
+                                <input type="text" id="contact-name" class="form-control" placeholder="Ej. Ana García" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Correo Electrónico</label>
+                                <input type="email" id="contact-email" class="form-control" placeholder="Ej. ana@gmail.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-message">Mensaje o Consulta</label>
+                                <textarea id="contact-message" class="form-control" rows="4" placeholder="¿En qué podemos ayudarte?" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Enviar Mensaje</button>
+                        </form>
+                        <div id="contact-message-status" class="alert-message success-message hide"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand-col">
+                    <a href="#" class="logo-link footer-logo-link">
+                        <img src="assets/logo.png" alt="MAKI Boutique Logo" class="footer-logo">
+                        <div class="logo-text">
+                            <span class="brand-name">MAKI</span>
+                            <span class="brand-sub">BOUTIQUE</span>
+                        </div>
+                    </a>
+                    <p class="footer-about-text">Moda femenina exclusiva. Diseños delicados creados para inspirar elegancia y confianza en cada paso.</p>
+
+                </div>
+                <div class="footer-nav-col">
+                    <h4>Navegar</h4>
+                    <ul>
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#categories">Colecciones</a></li>
+                        <li><a href="#products">Productos</a></li>
+                        <li><a href="#about">Nosotros</a></li>
+                    </ul>
+                </div>
+                <div class="footer-nav-col">
+                    <h4>Categorías</h4>
+                    <ul>
+                        <li><a href="#products" class="cat-filter-shortcut" data-category="Vestidos">Vestidos</a></li>
+                        <li><a href="#products" class="cat-filter-shortcut" data-category="Tops">Tops & Blusas</a></li>
+                        <li><a href="#products" class="cat-filter-shortcut" data-category="Faldas">Faldas</a></li>
+                        <li><a href="#products" class="cat-filter-shortcut" data-category="Accesorios">Accesorios</a></li>
+                    </ul>
+                </div>
+                <div class="footer-nav-col">
+                    <h4>Ayuda & Servicio</h4>
+                    <ul>
+                        <li><a href="#contact">Guía de Tallas</a></li>
+                        <li><a href="#contact">Envíos y Retornos</a></li>
+                        <li><a href="#contact">Preguntas Frecuentes</a></li>
+                        <li><a href="#contact">Contacto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="footer-divider">
+            <div class="footer-bottom">
+                <p>&copy; 2026 MAKI Boutique. Todos los derechos reservados. Creado con amor por la moda.</p>
+                <div class="payment-methods">
+                    <i data-lucide="credit-card" title="Tarjeta de Crédito / Débito"></i>
+                    <span class="payment-text">Pago Seguro en Línea</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Drawer (Right Side) -->
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-drawer-header">
+            <h3>Tu Carrito (<span id="cart-drawer-count">0</span>)</h3>
+            <button class="close-cart-btn" id="close-cart-btn" aria-label="Cerrar Carrito">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        
+        <!-- Cart Items -->
+        <div class="cart-drawer-body">
+            <div class="empty-cart-message" id="empty-cart-message">
+                <i data-lucide="shopping-bag" class="empty-cart-icon"></i>
+                <p>Tu carrito está vacío</p>
+                <a href="#products" class="btn btn-primary btn-sm close-cart-btn-action">Explorar Ropa</a>
+            </div>
+            <div class="cart-items-list" id="cart-items-list">
+                <!-- Dynamic cart items rendered here -->
+            </div>
+        </div>
+
+        <!-- Cart Footer -->
+        <div class="cart-drawer-footer" id="cart-drawer-footer">
+            <div class="cart-summary-line">
+                <span>Subtotal:</span>
+                <span class="summary-val" id="cart-subtotal">$0.00</span>
+            </div>
+            <div class="cart-summary-line">
+                <span>Envío:</span>
+                <span class="summary-val" id="cart-shipping">Calculado al pagar</span>
+            </div>
+            <div class="cart-summary-line total-line">
+                <span>Total:</span>
+                <span class="summary-val" id="cart-total">$0.00</span>
+            </div>
+            <button class="btn btn-primary btn-block" id="checkout-btn" style="background: linear-gradient(135deg, #25d366, #128c7e); box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); border: none;">
+                <i data-lucide="message-circle"></i>
+                <span>Comprar por WhatsApp</span>
+            </button>
+        </div>
+    </div>
+    <div class="overlay" id="cart-overlay"></div>
+
+    <!-- Product Quick View Modal -->
+    <div class="modal" id="quickview-modal">
+        <div class="modal-content">
+            <button class="close-modal-btn" id="close-modal-btn" aria-label="Cerrar modal">
+                <i data-lucide="x"></i>
+            </button>
+            <div class="modal-grid" id="modal-product-detail">
+                <!-- Dynamic product quickview layout -->
+            </div>
+        </div>
+    </div>
+    <div class="overlay" id="modal-overlay"></div>
+
+    <!-- Dynamic Alert Notification Popup -->
+    <div class="toast-notification" id="toast-notification">
+        <div class="toast-content">
+            <i data-lucide="check-circle" class="toast-icon"></i>
+            <span class="toast-message" id="toast-message">Producto añadido al carrito</span>
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/525618507408?text=Hola%20Maki%20Boutique!%20Me%20gustar%C3%ADa%20hacer%20una%20consulta." class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chatear por WhatsApp">
+        <i data-lucide="message-circle"></i>
+    </a>
+
+    <!-- Script File -->
+    <script src="script.js"></script>
+</body>
+</html>
