@@ -87,7 +87,7 @@ let activeProducts = [...products]; // Copia de respaldo por si el servidor est�
 // Configuración de la API del Backend (Reemplaza la URL de producción cuando la despliegues)
 const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:5000/api/products'
-    : 'https://maki-boutique-backend.onrender.com/api/products';
+    : 'https://maki-api.vercel.app/api/products';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Initialize Lucide Icons
